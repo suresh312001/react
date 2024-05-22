@@ -3,10 +3,12 @@
 .App {
   font-family: Arial, sans-serif;
   margin: 20px;
+  color: #333; /* Text color */
 }
 
 h1 {
   text-align: center;
+  color: #007bff; /* Heading color */
 }
 
 table {
@@ -33,54 +35,59 @@ tr:nth-child(even) {
 tr:hover {
   background-color: #dddddd;
 }
-.chat-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-  border: 1px solid #ddd;
+
+/* Dark theme */
+body.dark-mode {
+  background-color: #333; /* Background color */
+  color: #fff; /* Text color */
 }
 
-.messages {
-  flex: 1;
+h1.dark-mode {
+  color: #007bff; /* Heading color */
+}
+
+th.dark-mode,
+td.dark-mode {
+  border-color: #555; /* Table border color */
+}
+
+th.dark-mode {
+  background-color: #444; /* Table header background color */
+}
+
+tr.dark-mode:nth-child(even) {
+  background-color: #444; /* Even row background color */
+}
+
+tr.dark-mode:hover {
+  background-color: #555; /* Hovered row background color */
+}
+
+/* Interactive colors */
+button {
   padding: 10px;
-  overflow-y: scroll;
-  border-bottom: 1px solid #ddd;
+  border: none;
+  background-color: #007bff; /* Button background color */
+  color: #fff; /* Button text color */
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-.message {
-  margin-bottom: 10px;
+button:hover {
+  background-color: #0056b3; /* Hovered button background color */
 }
 
-.message.user {
-  text-align: right;
-}
-
-.message.bot {
-  text-align: left;
-}
-
-.input-container {
-  display: flex;
-  padding: 10px;
-  border-top: 1px solid #ddd;
-}
-
-input {
+input,
+input:placeholder {
   flex: 1;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
   margin-right: 10px;
+  background-color: #fff; /* Input background color */
+  color: #333; /* Input text color */
 }
 
-button {
-  padding: 10px;
-  border: none;
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
+input:focus {
+  border-color: #007bff; /* Focused input border color */
 }

@@ -1,77 +1,62 @@
-// MainTable.jsx
+import React from 'react';
+import salariesData from './salariesData.json';
 
-import React, { useState, useEffect } from 'react';
-import './App.css';
-
-function MainTable({ onRowClick }) {
-  const [data, setData] = useState([]);
-  const [sortConfig, setSortConfig] = useState({ key: 'work_year', direction: 'ascending' });
-
-  useEffect(() => {
-    // Lazy load the data
-    import('./salariesData.json').then((jsonData) => setData(jsonData.default));
-  }, []);
-
-  const handleSort = (key) => {
-    // Sorting logic
-  };
-
-  const handleRowClick = (year) => {
-    // Filter data for the selected year
-    const filteredData = data.filter((job) => job.work_year === year);
-
-    // Aggregate job titles and calculate counts
-    const aggregatedData = filteredData.reduce((acc, curr) => {
-      acc[curr.job_title] = (acc[curr.job_title] || 0) + 1;
-      return acc;
-    }, {});
-
-    // Create an array of objects from the aggregated data
-    const tableData = Object.entries(aggregatedData).map(([jobTitle, count]) => ({
-      work_year: year,
-      job_title: jobTitle,
-      count,
-    }));
-
-    // Update parent component state with the selected year's data
-    onRowClick(tableData);
-  };
-
-  const getSortIndicator = (key) => {
-    if (sortConfig.key === key) {
-      return sortConfig.direction === 'ascending' ? '↑' : '↓';
+const MainTable = ({ onRowClick }) => {
+  // Transforming the data to calculate total jobs, average salary, and job titles for each year
+  const yearStats = salariesData.reduce((acc, curr) => {
+    if (!acc[curr.work_year]) {
+      acc[curr.work_year] = { totalJobs: 0, totalSalary: 0, jobTitles: {} };
     }
-    return '';
-  };
+    acc[curr.work_year].totalJobs++;
+    acc[curr.work_year].totalSalary += curr.salary_in_usd;
+    if (!acc[curr.work_year].jobTitles[curr.job_title]) {
+      acc[curr.work_year].jobTitles[curr.job_title] = 0;
+    }
+    acc[curr.work_year].jobTitles[curr.job_title]++;
+    return acc;
+  }, {});
 
-  if (data.length === 0) return <p>Loading...</p>;
+  // Calculating average salary and formatting data for each year
+  const yearAverages = Object.keys(yearStats).map(year => {
+    const { totalJobs, totalSalary, jobTitles } = yearStats[year];
+    const averageSalary = totalSalary / totalJobs;
+    const formattedJobTitles = Object.entries(jobTitles).map(([title, count]) => ({ title, count }));
+    return {
+      year: parseInt(year),
+      totalJobs,
+      averageSalary,
+      jobTitles: formattedJobTitles,
+    };
+  });
 
   return (
-    <table border="1">
+    <table>
       <thead>
         <tr>
-          <th onClick={() => handleSort('work_year')}>
-            Work Year {getSortIndicator('work_year')}
-          </th>
-          <th onClick={() => handleSort('job_title')}>
-            Job Title {getSortIndicator('job_title')}
-          </th>
-          <th onClick={() => handleSort('salary')}>
-            Salary {getSortIndicator('salary')}
-          </th>
+          <th>Year</th>
+          <th>Total Jobs</th>
+          <th>Average Salary (USD)</th>
+          <th>Job Titles</th>
         </tr>
       </thead>
       <tbody>
-        {data.map((job) => (
-          <tr key={`${job.work_year}_${job.job_title}_${job.salary}`} onClick={() => handleRowClick(job.work_year)}>
-            <td>{job.work_year}</td>
-            <td>{job.job_title}</td>
-            <td>{job.salary} {job.salary_currency}</td>
+        {yearAverages.map(({ year, totalJobs, averageSalary, jobTitles }) => (
+          <tr key={year} onClick={() => onRowClick([{ year, totalJobs, averageSalary, jobTitles }])}>
+            <td>{year}</td>
+            <td>{totalJobs}</td>
+            <td>{averageSalary.toFixed(2)}</td>
+            <td>
+              <ul>
+                {jobTitles.map(({ title, count }) => (
+                  <li key={title}>{`${title}: ${count}`}</li>
+                ))}
+              </ul>
+            </td>
           </tr>
         ))}
       </tbody>
     </table>
   );
-}
+};
 
 export default MainTable;

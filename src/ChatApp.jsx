@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import salariesData from './salariesData.json';
 import './ChatApp.css';
 
 const ChatApp = ({ kaggleData }) => {

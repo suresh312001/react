@@ -1,3 +1,4 @@
+/* Global styles */
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -5,9 +6,71 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #fff; /* Default background color */
+  color: #333; /* Default text color */
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+/* Light mode */
+h1,
+table,
+th,
+td,
+tr,
+input,
+input::placeholder,
+button {
+  color: #333; /* Text color */
+  background-color: #fff; /* Background color */
+}
+
+/* Dark mode */
+body.dark-mode {
+  background-color: #333; /* Dark mode background color */
+  color: #fff; /* Dark mode text color */
+}
+
+.dark-mode h1,
+.dark-mode table,
+.dark-mode th,
+.dark-mode td,
+.dark-mode tr,
+.dark-mode input,
+.dark-mode input::placeholder,
+.dark-mode button {
+  color: #fff; /* Dark mode text color */
+  background-color: #444; /* Dark mode background color */
+}
+
+/* Interactive colors */
+button {
+  padding: 10px;
+  border: none;
+  background-color: #007bff; /* Button background color */
+  color: #fff; /* Button text color */
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3; /* Hovered button background color */
+}
+
+input,
+input::placeholder {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 10px;
+  background-color: #fff; /* Input background color */
+  color: #333; /* Input text color */
+}
+
+input:focus {
+  border-color: #007bff; /* Focused input border color */
 }
