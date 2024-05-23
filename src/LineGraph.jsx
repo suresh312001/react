@@ -18,9 +18,9 @@ const LineGraph = ({ data }) => {
         type: 'line',
         data: {
           labels: data.map(item => item.year),
-          datasets: data.map(item => ({
-            label: item.job_title,
-            data: [item.averageSalary],
+          datasets: data[0].values.map((_, index) => ({
+            label: data.map(item => item.job_title)[index],
+            data: data.map(item => item.values[index]),
             borderColor: getRandomColor(),
             fill: false,
           })),
