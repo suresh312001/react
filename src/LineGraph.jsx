@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 
 const LineGraph = ({ data }) => {
   const chartRef = useRef(null);
   const chartInstanceRef = useRef(null); // Keep track of the chart instance
+  const [selectedJob, setSelectedJob] = useState(null);
 
   useEffect(() => {
     if (chartInstanceRef.current) {
@@ -26,6 +27,15 @@ const LineGraph = ({ data }) => {
           })),
         },
         options: {
+          onClick: (event, elements) => {
+            if (elements.length > 0) {
+              const { datasetIndex, index } = elements[0];
+              const year = data[index].year;
+              const jobTitle = data[datasetIndex].job_title;
+              const averageSalary = data[index].values[datasetIndex];
+              setSelectedJob({ year, jobTitle, averageSalary });
+            }
+          },
           scales: {
             x: {
               title: {
@@ -59,6 +69,14 @@ const LineGraph = ({ data }) => {
     <div>
       <h2>Line Graph</h2>
       <canvas ref={chartRef} />
+      {selectedJob && (
+        <div>
+          <h3>Job Details</h3>
+          <p><strong>Year:</strong> {selectedJob.year}</p>
+          <p><strong>Job Title:</strong> {selectedJob.jobTitle}</p>
+          <p><strong>Average Salary:</strong> ${selectedJob.averageSalary}</p>
+        </div>
+      )}
     </div>
   );
 };
